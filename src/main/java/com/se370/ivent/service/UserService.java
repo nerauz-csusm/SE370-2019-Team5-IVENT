@@ -1,6 +1,7 @@
 package com.se370.ivent.service;
 
 import com.se370.ivent.DAO.UserDAO;
+import com.se370.ivent.models.LoginForm;
 import com.se370.ivent.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,9 @@ public class UserService {
 
     public com.se370.ivent.models.User addUser(com.se370.ivent.models.User user) {
         return userDAO.addUser(user);
+    }
+
+    public User logUser(LoginForm loginForm) {
+        return userDAO.logUser(loginForm);
     }
 }

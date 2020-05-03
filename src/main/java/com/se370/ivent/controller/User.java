@@ -1,5 +1,6 @@
 package com.se370.ivent.controller;
 
+import com.se370.ivent.models.LoginForm;
 import com.se370.ivent.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,5 +27,13 @@ public class User {
 
         user.setPassword(encodedPassword);
         return userService.addUser(user);
+    }
+
+    @PostMapping("/auth")
+    public com.se370.ivent.models.User authUser(@RequestBody LoginForm loginForm) {
+        String encodedPassword = encoder.encode(loginForm.getPassword());
+
+        loginForm.setPassword(encodedPassword);
+        return userService.logUser(loginForm);
     }
 }
