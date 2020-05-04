@@ -1,10 +1,28 @@
+const check_genre = (event) => {
+    if (event.classifications && event.classifications[0] && event.classifications[0].genre && event.classifications[0].genre.name !== "Undefined") {
+        let html_string = `<p><b>Genre:</b> ${event.classifications[0].genre.name}`;
+
+        return event.classifications[0].subGenre !== undefined ? html_string + `, ${event.classifications[0].subGenre.name}` : html_string;
+    }
+    return "";
+}
+
+const check_price = (event) => {
+    if (event.priceRanges !== undefined && event.priceRanges[0] !== undefined)
+        return `<p><b>Price:</b> $${event.priceRanges[0].min} to $${event.priceRanges[0].max}</p>`;
+    return "";
+}
+
 const add_column = (event, row_id) => {
     $(`#${row_id}`).append(`
-        <div class="col d-flex justify-content-center text-center mt-3 mb-3">
+        <div class="col d-flex justify-content-center mt-3 mb-3">
             <div class="card" style="width: 18rem;">
-                <img src="${event.images[0].url}" class="card-img-top" alt="Image of the event">
+                <img src="${event.images[0] ? event.images[0].url : "https://discordapp.com/channels/633228748526714880/633228748526714882/706956957247864843"}" class="card-img-top" alt="Image of the event">
                 <div class="card-body">
-                    <p class="card-text">${event.name}</p>
+                    <p class="card-text text-center">${event.name} - ${event.dates.timezone}</p>
+                    <p><b>Date:</b> ${event.dates.start.localDate} at ${event.dates.start.localTime}</p>
+                    ${check_genre(event)}
+                    ${check_price(event)}
                 </div>
             </div>
         </div>    
