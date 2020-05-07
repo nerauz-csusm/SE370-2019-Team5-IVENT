@@ -1,0 +1,9 @@
+body{
+background-image: url("https://i.pinimg.com/originals/86/04/ca/8604caa736f9dc197916951d7fe7ebd7.jpg");
+background-size: cover;
+}
+
+.col-4{
+	opacity: .95;
+    background: white;
+}|
