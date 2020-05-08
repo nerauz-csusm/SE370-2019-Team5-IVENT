@@ -78,7 +78,7 @@ function createForm() {
             </div>
             <div class="form-group col-md-6">
                 <label for="organization">Organization</label>
-                <input type="password" class="form-control" id="organization" placeholder="Organizator of the event">
+                <input type="password" class="form-control" id="organization" placeholder="Organizer of the event">
             </div>
         </div>
         <div class="form-group">
