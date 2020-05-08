@@ -16,4 +16,9 @@ public class Page {
     public String registerPage() {
         return "register";
     }
+
+    @RequestMapping("/events")
+    public String eventsPage() {
+        return "events";
+    }
 }

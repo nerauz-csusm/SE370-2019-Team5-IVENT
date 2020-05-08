@@ -23,6 +23,7 @@ const add_column = (event, row_id) => {
                     <p><b>Date:</b> ${event.dates.start.localDate} at ${event.dates.start.localTime}</p>
                     ${check_genre(event)}
                     ${check_price(event)}
+                    <span class="pull-right"><i class="fas fa-star"></i></span>
                 </div>
             </div>
         </div>    
@@ -42,7 +43,11 @@ const add_events_to_page = (events) => {
         }
 
         add_column(event, row_id);
-  });
+    });
+
+    $('.fas').click(function() {
+        this.style.color !== 'gold' ? $(this).css('color', 'gold') : $(this).css('color', '');
+    });
 };
 
 const filterCallback = (event, eventNames) => {
