@@ -91,8 +91,18 @@ function createForm() {
                 <input type="number" class="form-control" id="min-price" placeholder="Minimum price">
             </div>
             <div class="form-group col-md-6">
-                <label for="max-price">Organization</label>
+                <label for="max-price">Max price</label>
                 <input type="number" class="form-control" id="max-price" placeholder="Maximum price">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="begin-date">Begin Date</label>
+                <input type="text" class="form-control picker" id="begin-date" placeholder="Beginning date">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="end-date">Max price</label>
+                <input type="text" class="form-control picker" id="end-date" placeholder="Ending date">
             </div>
         </div>
         <div class="form-row">
@@ -106,6 +116,8 @@ function createForm() {
         </div>        
     </form>
     `);
+
+    $('.picker').datepicker({});
 }
 
 function displayForm() {
