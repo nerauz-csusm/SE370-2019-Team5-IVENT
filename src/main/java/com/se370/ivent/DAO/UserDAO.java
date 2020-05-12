@@ -2,6 +2,7 @@ package com.se370.ivent.DAO;
 
 import com.se370.ivent.models.LoginForm;
 import com.se370.ivent.models.User;
+import kotlin.coroutines.jvm.internal.SuspendFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -22,13 +23,24 @@ public class UserDAO {
         String encodedPassword = encoder.encode(user.getPassword());
 
         user.setPassword(encodedPassword);
-        return repository.insert(user);
+
+        try {
+            if (repository.findByEmail(user.getEmail()) == null)
+                return repository.insert(user);
+            return null;
+        } catch (Exception e) {
+            return repository.insert(user);
+        }
     }
 
     public User logUser(LoginForm loginForm) {
-        User user = repository.findByEmail(loginForm.getEmail());
-        if (encoder.matches(loginForm.getPassword(), user.getPassword()))
-            return  user;
+        try {
+            User user = repository.findByEmail(loginForm.getEmail());
+            if (encoder.matches(loginForm.getPassword(), user.getPassword()))
+                return  user;
+        } catch (Exception e) {
+            return null;
+        }
         return null;
     }
 }

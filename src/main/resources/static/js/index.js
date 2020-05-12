@@ -1,3 +1,5 @@
+import {toggleNavBtn} from "/js/tools.js";
+
 const check_genre = (event) => {
     if (event.classifications && event.classifications[0] && event.classifications[0].genre && event.classifications[0].genre.name !== "Undefined") {
         let html_string = `<p><b>Genre:</b> ${event.classifications[0].genre.name}`;
@@ -60,6 +62,8 @@ const filterCallback = (event, eventNames) => {
 }
 
 $(() => {
+    toggleNavBtn();
+
     axios.get("https://app.ticketmaster.com/discovery/v2/events?countryCode=US&apikey=l84bOGkhL4pmDdQQ2yzJGQAkoldSX3aW&sort=name,asc&size=200")
         .then((res) => {
             let eventNames = [];
