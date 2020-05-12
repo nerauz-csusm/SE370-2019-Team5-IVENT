@@ -1,3 +1,5 @@
+import {toggleNavBtn} from "/js/tools.js";
+
 const check_genre = (event) => {
     if (event.classifications && event.classifications[0] && event.classifications[0].genre && event.classifications[0].genre.name !== "Undefined") {
         let html_string = `<p><b>Genre:</b> ${event.classifications[0].genre.name}`;
@@ -49,7 +51,11 @@ function  addEventsToPage(events) {
 }
 
 function createEvents() {
-    axios.get("https://app.ticketmaster.com/discovery/v2/events?countryCode=US&apikey=l84bOGkhL4pmDdQQ2yzJGQAkoldSX3aW&sort=name,asc&size=5")
+    const events = JSON.parse(localStorage.getItem('events'));
+
+    if (events)
+        addEventsToPage(events);
+    /*axios.get("https://app.ticketmaster.com/discovery/v2/events?countryCode=US&apikey=l84bOGkhL4pmDdQQ2yzJGQAkoldSX3aW&sort=name,asc&size=5")
         .then((res) => {
             let events = res.data['_embedded'].events;
 
@@ -57,7 +63,7 @@ function createEvents() {
         })
         .catch((error) => {
             console.log(error);
-        });
+        });*/
 }
 
 function displayEvents() {
@@ -144,6 +150,8 @@ function onBreadcrumbItemClick(e) {
 };
 
 $(() => {
+    toggleNavBtn();
+
     $('.over').click(onBreadcrumbItemClick);
 
     createEvents();

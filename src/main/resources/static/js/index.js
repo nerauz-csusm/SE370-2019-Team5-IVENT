@@ -1,5 +1,20 @@
 import {toggleNavBtn} from "/js/tools.js";
 
+let events = [];
+let fav_events = [];
+
+const manage_fav = (id) => {
+    const filtered_events = fav_events.filter((event) => event.id === id)
+
+    if (filtered_events.length >= 1)
+        fav_events = fav_events.filter((event) => event.id !== id);
+    else {
+        fav_events.push(events.filter((event) => event.id === id)[0]);
+    }
+
+    localStorage.setItem('events', JSON.stringify(fav_events));
+};
+
 const check_genre = (event) => {
     if (event.classifications && event.classifications[0] && event.classifications[0].genre && event.classifications[0].genre.name !== "Undefined") {
         let html_string = `<p><b>Genre:</b> ${event.classifications[0].genre.name}`;
@@ -25,15 +40,21 @@ const add_column = (event, row_id) => {
                     <p><b>Date:</b> ${event.dates.start.localDate} at ${event.dates.start.localTime}</p>
                     ${check_genre(event)}
                     ${check_price(event)}
-                    <span class="pull-right"><i class="fas fa-star"></i></span>
+                    <span class="pull-right"><i class="fas fa-star" id="${event.id}"></i></span>
                 </div>
             </div>
         </div>    
     `);
+
+    if (fav_events.filter((fav_event) => fav_event.id === event.id).length > 0) {
+        const $_elem = $(`#${event.id}`);
+
+        $_elem.css('color', $_elem.css('color') !== 'gold' ? 'gold' : '');
+    }
 };
 
 
-const add_events_to_page = (events) => {
+const add_events_to_page = () => {
     let row_number = 1;
     let row_id;
 
@@ -48,7 +69,8 @@ const add_events_to_page = (events) => {
     });
 
     $('.fas').click(function() {
-        this.style.color !== 'gold' ? $(this).css('color', 'gold') : $(this).css('color', '');
+        $(this).css('color', this.style.color !== 'gold' ? 'gold' : '');
+        manage_fav($(this).attr('id'));
     });
 };
 
@@ -62,14 +84,19 @@ const filterCallback = (event, eventNames) => {
 }
 
 $(() => {
+    const stringEvent = localStorage.getItem('events');
+
     toggleNavBtn();
+
+    if (stringEvent)
+        fav_events = JSON.parse(stringEvent);
 
     axios.get("https://app.ticketmaster.com/discovery/v2/events?countryCode=US&apikey=l84bOGkhL4pmDdQQ2yzJGQAkoldSX3aW&sort=name,asc&size=200")
         .then((res) => {
-            let eventNames = [];
-            let filteredEvents = res.data['_embedded'].events.filter((event) => filterCallback(event, eventNames));
+            const eventNames = [];
+            events = res.data['_embedded'].events.filter((event) => filterCallback(event, eventNames));
 
-            add_events_to_page(filteredEvents);
+            add_events_to_page(events);
         })
         .catch((error) => {
             console.log(error);
