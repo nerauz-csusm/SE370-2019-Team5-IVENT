@@ -107,7 +107,7 @@ function createForm() {
                 <input type="text" class="form-control picker" id="begin-date" placeholder="Beginning date">
             </div>
             <div class="form-group col-md-6">
-                <label for="end-date">Max price</label>
+                <label for="end-date">End Date</label>
                 <input type="text" class="form-control picker" id="end-date" placeholder="Ending date">
             </div>
         </div>
