@@ -8,16 +8,16 @@ $(() => {
 
         axios.post('/user/auth', formData)
             .then(function (response) {
-                makeAlert('sign-button', 'alert-success', response.data, () => {
-                    localStorage.setItem('logged', "true");
+                makeAlert('sign-button', 'alert-success', response.data.message, () => {
+                    localStorage.setItem("id", response.data.data.id);
                     window.location.href = "/"
                 });
             })
             .catch(function (error) {
                 if (error.response.status === 400)
-                    makeAlert('sign-button', 'alert-danger', error.response.data);
+                    makeAlert('sign-button', 'alert-danger', error.response.data.message);
                 else
-                    console.log({error });
+                    console.log({ error });
             });
     });
 });

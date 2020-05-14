@@ -2,6 +2,8 @@ package com.se370.ivent.controller;
 
 import com.se370.ivent.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -15,60 +17,59 @@ public class Event {
     private EventService eventService;
 
     @GetMapping
-    public Collection<com.se370.ivent.models.Event> getEvents(@RequestParam("id") String creatorId) {
-        return eventService.getEvents(creatorId == "" ? null : creatorId);
+    public ResponseEntity<Map<String, Object>> getEvents(@RequestParam("id") String creatorId) {
+        Map<String, Object> response = new HashMap<String, Object>();
+        Collection<com.se370.ivent.models.Event> events = eventService.getEvents(creatorId == "" ? null : creatorId);
+        return ResponseEntity.status(HttpStatus.OK).body(eventFound(response, events));
     };
 
     @PostMapping
-    public Map<String, Object> postEvent(@RequestBody com.se370.ivent.models.Event event) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    public ResponseEntity<Map<String, Object>> postEvent(@RequestBody com.se370.ivent.models.Event event) {
+        Map<String, Object> response = new HashMap<String, Object>();
         com.se370.ivent.models.Event newEvent = eventService.addEvent(event);
 
         if (newEvent == null) {
-            map.put("statusCode", 400);
-            map.put("message", "A problem occured");
-            return map;
+            response.put("message", "Bad request");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        map.put("statusCode", 200);
-        map.put("data", newEvent);
+        response.put("message", "Event created");
+        response.put("data", newEvent);
 
-        return map;
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     Map<String, Object> eventNotFound(Map<String, Object> map) {
-        map.put("statusCode", 400);
         map.put("message", "Event not found");
         return map;
     };
 
-    Map<String, Object> eventFound(Map<String, Object> map, com.se370.ivent.models.Event event) {
-        map.put("statusCode", 200);
+    <T> Map<String, Object> eventFound(Map<String, Object> map, T event) {
         map.put("data", event);
         return map;
     };
 
     @PostMapping(value = "/join")
-    public Map<String, Object> joinEvent(@RequestBody Map<String, String> param) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    ResponseEntity<Map<String, Object>> joinEvent(@RequestBody Map<String, String> param) {
+        Map<String, Object> response = new HashMap<String, Object>();
         com.se370.ivent.models.Event event = eventService.joinEvent(param.get("eventId"), param.get("userId"));
 
-        if (event == null) return eventNotFound(map);
+        if (event == null) return ResponseEntity.badRequest().body(eventNotFound(response));
 
-        return eventFound(map, event);
+        return ResponseEntity.status(HttpStatus.OK).body(eventFound(response, event));
     }
 
     @PatchMapping
-    public Map<String, Object> patchEvent(@RequestBody Map<String, String> param) {
-        Map<String, Object> map = new HashMap<String, Object>();
+    ResponseEntity<Map<String, Object>> patchEvent(@RequestBody Map<String, String> param) {
+        Map<String, Object> response = new HashMap<String, Object>();
         String eventId = param.get("eventId");
 
         param.remove("eventId");
 
         com.se370.ivent.models.Event event = eventService.updateEvent(eventId, param);
 
-        if (event == null) return eventNotFound(map);
+        if (event == null) return ResponseEntity.badRequest().body(eventNotFound(response));
 
-        return eventFound(map, event);
+        return ResponseEntity.status(HttpStatus.OK).body(eventFound(response, event));
     }
 }

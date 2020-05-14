@@ -1,5 +1,6 @@
 package com.se370.ivent.models;
 
+import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -11,17 +12,26 @@ public class Event {
     @MongoId
     private String id;
     private String title;
-    private String organizator;
+    private String organizations;
     private String description;
     private float minPrice;
     private float maxPrice;
     private String beginDate;
     private String endDate;
+    private String image;
     private String creatorId;
     private Collection<String> joinedUsers;
 
     public Collection<String> getJoinedUsers() {
         return joinedUsers;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setJoinedUsers(Collection<String> joinedUsers) {
@@ -56,12 +66,12 @@ public class Event {
         this.title = title;
     }
 
-    public String getOrganizator() {
-        return organizator;
+    public String getOrganizations() {
+        return organizations;
     }
 
-    public void setOrganizator(String organizator) {
-        this.organizator = organizator;
+    public void getOrganizations(String organizations) {
+        this.organizations = organizations;
     }
 
     public String getDescription() {
@@ -106,7 +116,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event [id=" + id + ", title=" + title + ", organizator=" + organizator + "]";
+        return "Event [id=" + id + ", title=" + title + ", organizations=" + organizations + "]";
     }
 
     private void add(String key, String value) {
@@ -115,7 +125,7 @@ public class Event {
                 this.title = value;
                 break;
             case "organizator":
-                this.organizator = value;
+                this.organizations = value;
                 break;
             case "description":
                 this.description = value;

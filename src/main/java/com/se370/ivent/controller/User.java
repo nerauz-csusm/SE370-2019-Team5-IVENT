@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -28,12 +30,18 @@ public class User {
     }
 
     @PostMapping(value="/auth")
-    public ResponseEntity<String> authUser(@RequestBody LoginForm loginForm) {
+    public ResponseEntity<Map<String, Object>> authUser(@RequestBody LoginForm loginForm) {
         com.se370.ivent.models.User user = userService.logUser(loginForm);
+        Map<String, Object> response = new HashMap<String, Object>();
 
-        if (user == null)
-            return ResponseEntity.badRequest().body("User not found");
+        if (user == null) {
+            response.put("message", "Invalid email or password");
+            return ResponseEntity.badRequest().body(response);
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully sign in");
+        response.put("message", "Successfully logged in");
+        response.put("data", user);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
